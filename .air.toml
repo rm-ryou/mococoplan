@@ -1,0 +1,43 @@
+# Config file for [Air](https://github.com/air-verse/air) in TOML format
+
+# Working directory
+# . or absolute path, please note that the directories following must be under root.
+root = "/mococoplan"
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/main ./cmd/main.go"
+bin = "tmp/main"
+# Watch these filename extensions.
+include_ext = ["go"]
+# Exclude specific regular expressions.
+exclude_regex = ["_test\\.go"]
+
+[log]
+# Show log time
+time = false
+# Only show main log (silences watcher, build, runner)
+main_only = false
+# silence all logs produced by air
+silent = false
+
+[color]
+# Customize each part's color. If no color found, use the raw app log.
+main = "magenta"
+watcher = "cyan"
+build = "yellow"
+runner = "green"
+
+[misc]
+# Delete tmp directory on exit
+clean_on_exit = true
+
+[screen]
+clear_on_rebuild = true
+keep_scroll = true
+
+[proxy]
+# Enable live-reloading on the browser.
+enabled = true
+proxy_port = 3000
+app_port = 1323
