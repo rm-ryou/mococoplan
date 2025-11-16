@@ -7,3 +7,19 @@ services:
       - "3000:3000"
     volumes:
       - "./:/mococoplan"
+
+  mysql:
+    image: mysql:9.5.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-root}"
+      MYSQL_USER: "${MYSQL_USER:-user}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-password}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-mococoplan}"
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql:/var/lib/mysql"
+
+volumes:
+  mysql:
+    driver: "local"
