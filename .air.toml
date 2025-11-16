@@ -6,7 +6,7 @@ root = "/mococoplan"
 tmp_dir = "tmp"
 
 [build]
-cmd = "go build -o ./tmp/main ./cmd/main.go"
+cmd = "go build -o ./tmp/main"
 bin = "tmp/main"
 # Watch these filename extensions.
 include_ext = ["go"]
@@ -40,4 +40,4 @@ keep_scroll = true
 # Enable live-reloading on the browser.
 enabled = true
 proxy_port = 3000
-app_port = 1323
+app_port = 8080
