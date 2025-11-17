@@ -27,6 +27,33 @@ migrate-create NAME:
     create -ext sql -dir /migrations -seq {{NAME}}
 
 [group: "db"]
+migrate-up:
+  docker run --rm \
+    -v {{justfile_directory()}}/{{MIGRATIONS_DIR}}:/migrations \
+    {{MIGRATE_IMAGE}} \
+    -path=/migrations \
+    -database "mysql://{{DB_USER}}:{{DB_PASSWORD}}@tcp(mysql:{{DB_PORT}})/{{DB_NAME}}" \
+    up
+
+[group: "db"]
+migrate-down:
+  docker run --rm \
+    -v {{justfile_directory()}}/{{MIGRATIONS_DIR}}:/migrations \
+    {{MIGRATE_IMAGE}} \
+    -path=/migrations \
+    -database "mysql://{{DB_USER}}:{{DB_PASSWORD}}@tcp(mysql:{{DB_PORT}})/{{DB_NAME}}" \
+    down
+
+[group: "db"]
+migrate-down-1:
+  docker run --rm \
+    -v {{justfile_directory()}}/{{MIGRATIONS_DIR}}:/migrations \
+    {{MIGRATE_IMAGE}} \
+    -path=/migrations \
+    -database "mysql://{{DB_USER}}:{{DB_PASSWORD}}@tcp(mysql:{{DB_PORT}})/{{DB_NAME}}" \
+    down 1
+
+[group: "db"]
 migrate-version:
   # TODO: avoid hard cording
   docker run --rm \
