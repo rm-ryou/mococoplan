@@ -76,3 +76,7 @@ migrate-version:
     -path=/migrations \
     -database "mysql://{{DB_USER}}:{{DB_PASSWORD}}@tcp(mysql:{{DB_PORT}})/{{DB_NAME}}" \
     version
+
+[group: "db"]
+exec-db:
+  docker compose exec mysql mysql -u {{DB_USER}} -p mococoplan
