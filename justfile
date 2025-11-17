@@ -30,6 +30,7 @@ migrate-create NAME:
 migrate-up:
   docker run --rm \
     -v {{justfile_directory()}}/{{MIGRATIONS_DIR}}:/migrations \
+    --network "mococoplan_default" \
     {{MIGRATE_IMAGE}} \
     -path=/migrations \
     -database "mysql://{{DB_USER}}:{{DB_PASSWORD}}@tcp(mysql:{{DB_PORT}})/{{DB_NAME}}" \
@@ -39,19 +40,31 @@ migrate-up:
 migrate-down:
   docker run --rm \
     -v {{justfile_directory()}}/{{MIGRATIONS_DIR}}:/migrations \
+    --network "mococoplan_default" \
     {{MIGRATE_IMAGE}} \
     -path=/migrations \
     -database "mysql://{{DB_USER}}:{{DB_PASSWORD}}@tcp(mysql:{{DB_PORT}})/{{DB_NAME}}" \
-    down
+    down -all
 
 [group: "db"]
 migrate-down-1:
   docker run --rm \
     -v {{justfile_directory()}}/{{MIGRATIONS_DIR}}:/migrations \
+    --network "mococoplan_default" \
     {{MIGRATE_IMAGE}} \
     -path=/migrations \
     -database "mysql://{{DB_USER}}:{{DB_PASSWORD}}@tcp(mysql:{{DB_PORT}})/{{DB_NAME}}" \
     down 1
+
+[group: "db"]
+migrate-force VERSION:
+  docker run --rm \
+    -v {{justfile_directory()}}/{{MIGRATIONS_DIR}}:/migrations \
+    --network "mococoplan_default" \
+    {{MIGRATE_IMAGE}} \
+    -path=/migrations \
+    -database "mysql://{{DB_USER}}:{{DB_PASSWORD}}@tcp(mysql:{{DB_PORT}})/{{DB_NAME}}" \
+    force {{VERSION}}
 
 [group: "db"]
 migrate-version:
