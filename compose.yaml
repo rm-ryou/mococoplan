@@ -11,10 +11,10 @@ services:
   mysql:
     image: "mysql:9.5.0"
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-root}"
-      MYSQL_USER: "${MYSQL_USER:-user}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-password}"
-      MYSQL_DATABASE: "${MYSQL_DATABASE:-mococoplan}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root}"
+      MYSQL_USER: "${DB_USER:-user}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-password}"
+      MYSQL_DATABASE: "${DB_NAME:-mococoplan}"
     ports:
       - "3306:3306"
     volumes:
