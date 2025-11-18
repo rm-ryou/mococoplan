@@ -14,10 +14,6 @@ MIGRATE_IMAGE := "migrate/migrate:v4.19.0"
 default:
   @just --list
 
-help:
-  @echo "Availabel recipes:"
-  @echo "  just migrate-create name=<name>  # create new migration file"
-
 [group: "db"]
 migrate-create NAME:
   mkdir -p {{MIGRATIONS_DIR}}
@@ -80,3 +76,12 @@ migrate-version:
 [group: "db"]
 exec-db:
   docker compose exec mysql mysql -u {{DB_USER}} -p mococoplan
+
+help:
+  @echo "Availabel recipes:"
+  @echo "  just migrate-create <name>     # Create new migration file"
+  @echo "  just migrate-up                # Run all pending migrations"
+  @echo "  just migrate-down              # Rollback all migrations"
+  @echo "  just migrate-down-1            # Rollback one migration"
+  @echo "  just migrate-force <version>   # Force set migration version"
+  @echo "  just migrate-version           # Show current migrate"
