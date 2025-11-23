@@ -3,7 +3,30 @@ services:
     build:
       context: "."
       dockerfile: "Dockerfile.dev"
+    depends_on:
+      mysql:
+        condition: "service_healthy"
     ports:
       - "3000:3000"
     volumes:
       - "./:/mococoplan"
+
+  mysql:
+    image: "mysql:9.5.0"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root}"
+      MYSQL_USER: "${DB_USER:-user}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-password}"
+      MYSQL_DATABASE: "${DB_NAME:-mococoplan}"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: "5s"
+      retries: 5
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql:/var/lib/mysql"
+
+volumes:
+  mysql:
+    driver: "local"
