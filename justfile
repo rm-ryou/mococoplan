@@ -77,8 +77,27 @@ migrate-version:
 exec-db:
   docker compose exec mysql mysql -u {{DB_USER}} -p mococoplan
 
+[group: "server"]
+up:
+  docker compose up --build --detach
+
+[group: "server"]
+down:
+  docker compose down
+
+[group: "server"]
+logs:
+  docker compose logs -f
+
 help:
   @echo "Availabel recipes:"
+  @echo ""
+  @echo "Server"
+  @echo "  just up                        # Start Docker containers"
+  @echo "  just down                      # Stop Docker containers"
+  @echo "  just logs                      # Show Docker containers"
+  @echo ""
+  @echo "DB"
   @echo "  just migrate-create <name>     # Create new migration file"
   @echo "  just migrate-up                # Run all pending migrations"
   @echo "  just migrate-down              # Rollback all migrations"
