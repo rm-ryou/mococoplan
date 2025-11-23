@@ -12,7 +12,6 @@ type (
 		Name     string
 		User     string
 		Password string
-		Host     string
 		Port     string
 	}
 )
@@ -22,10 +21,9 @@ func NewConfig() *Config {
 		Port: getEnv("PORT", "8080"),
 		DB: DB{
 			Name:     getEnv("DB_NAME", "mococoplan"),
-			User:     getEnv("DB_USER", "mococoplan"),
-			Password: getEnv("DB_PASSWORD", "mococoplan"),
-			Host:     getEnv("DB_HOST", "mococoplan"),
-			Port:     getEnv("DB_Port", "mococoplan"),
+			User:     getEnv("DB_USER", "user"),
+			Password: getEnv("DB_PASSWORD", "password"),
+			Port:     getEnv("DB_Port", "3306"),
 		},
 	}
 }
