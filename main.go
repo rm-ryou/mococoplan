@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/rm-ryou/mococoplan/internal/api/route"
+	"github.com/rm-ryou/mococoplan/internal/api/router"
 	"github.com/rm-ryou/mococoplan/internal/config"
 	"github.com/rm-ryou/mococoplan/pkg/mysql"
 )
@@ -25,9 +26,9 @@ func main() {
 	}
 	defer db.Close()
 
-	router := route.Setup()
+	router := router.Setup(db)
 	srv := &http.Server{
-		Addr:    cfg.Port,
+		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: router,
 	}
 
