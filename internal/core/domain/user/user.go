@@ -1,8 +1,6 @@
-package domain
+package user
 
-import (
-	"time"
-)
+import "time"
 
 type User struct {
 	Id            int
