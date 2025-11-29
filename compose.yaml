@@ -6,6 +6,8 @@ services:
     depends_on:
       mysql:
         condition: "service_healthy"
+      redis:
+        condition: "service_started"
     ports:
       - "3000:3000"
     volumes:
@@ -27,6 +29,13 @@ services:
     volumes:
       - "mysql:/var/lib/mysql"
 
+  redis:
+    image: "redis:8.4.0"
+    volumes:
+      - "redis:/data"
+
 volumes:
   mysql:
+    driver: "local"
+  redis:
     driver: "local"
