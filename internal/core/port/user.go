@@ -13,5 +13,5 @@ type UserServicer interface {
 type UserRepository interface {
 	Register(ctx context.Context, user *domain.User) error
 	List(ctx context.Context) ([]*domain.User, error)
-	Delete(ctx context.Context, id domain.UserID) error
+	Delete(ctx context.Context, id int) error
 }

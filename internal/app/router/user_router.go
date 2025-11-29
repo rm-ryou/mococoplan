@@ -12,10 +12,10 @@ import (
 func NewUserRouter(mux *http.ServeMux, db *sql.DB) {
 	r := repository.NewUserRepository(db)
 	s := service.NewUserService(r)
-	c := handler.NewUserController(s)
+	h := handler.NewUserHandler(s)
 
 	userMux := http.NewServeMux()
-	userMux.HandleFunc("POST /api/v1/users/sign_up", c.SignUp)
+	userMux.HandleFunc("POST /api/v1/users/sign_up", h.SignUp)
 
 	mux.Handle("/api/v1/users/", userMux)
 }

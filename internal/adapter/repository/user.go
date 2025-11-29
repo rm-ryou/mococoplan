@@ -26,6 +26,6 @@ func (ur *UserRepository) List(ctx context.Context) ([]*domain.User, error) {
 	return nil, nil
 }
 
-func (ur *UserRepository) Delete(ctx context.Context, id domain.UserID) error {
+func (ur *UserRepository) Delete(ctx context.Context, id int) error {
 	return nil
 }
