@@ -20,7 +20,6 @@ type (
 		Host     string
 		Port     string
 		Password string
-		DB       string
 	}
 )
 
@@ -37,7 +36,6 @@ func NewConfig() *Config {
 			Host:     getEnv("REDIS_HOST", "redis"),
 			Port:     getEnv("REDIS_PORT", "6379"),
 			Password: getEnv("REDIS_PASSWORD", ""),
-			DB:       getEnv("REDIS_DB", "0"),
 		},
 	}
 }
