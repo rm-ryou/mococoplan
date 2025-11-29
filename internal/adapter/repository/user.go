@@ -4,15 +4,15 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/rm-ryou/mococoplan/internal/domain"
-	"github.com/rm-ryou/mococoplan/internal/service"
+	"github.com/rm-ryou/mococoplan/internal/core/domain"
+	"github.com/rm-ryou/mococoplan/internal/core/port"
 )
 
 type UserRepository struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) service.UserRepository {
+func NewUserRepository(db *sql.DB) port.UserRepository {
 	return &UserRepository{
 		db: db,
 	}

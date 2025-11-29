@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/rm-ryou/mococoplan/internal/api/controller"
-	"github.com/rm-ryou/mococoplan/internal/domain"
+	"github.com/rm-ryou/mococoplan/internal/core/domain"
+	"github.com/rm-ryou/mococoplan/internal/core/port"
 )
 
 type UserRepository interface {
@@ -17,7 +17,7 @@ type UserService struct {
 	repo UserRepository
 }
 
-func NewUserService(repo UserRepository) controller.UserServicer {
+func NewUserService(repo UserRepository) port.UserServicer {
 	return &UserService{
 		repo: repo,
 	}
