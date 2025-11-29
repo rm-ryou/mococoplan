@@ -9,7 +9,8 @@ type User struct {
 	Name          string
 	Email         string
 	EmailVerified bool
-	ImageUrl      string
+	PasswordHash  string
+	ImageUrl      *string
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 }
