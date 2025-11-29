@@ -4,8 +4,9 @@ import "os"
 
 type (
 	Config struct {
-		Port string
-		DB   DB
+		Port  string
+		DB    DB
+		Redis Redis
 	}
 
 	DB struct {
@@ -13,6 +14,13 @@ type (
 		User     string
 		Password string
 		Port     string
+	}
+
+	Redis struct {
+		Host     string
+		Port     string
+		Password string
+		DB       string
 	}
 )
 
@@ -24,6 +32,12 @@ func NewConfig() *Config {
 			User:     getEnv("DB_USER", "user"),
 			Password: getEnv("DB_PASSWORD", "password"),
 			Port:     getEnv("DB_Port", "3306"),
+		},
+		Redis: Redis{
+			Host:     getEnv("REDIS_HOST", "redis"),
+			Port:     getEnv("REDIS_PORT", "6379"),
+			Password: getEnv("REDIS_PASSWORD", ""),
+			DB:       getEnv("REDIS_DB", "0"),
 		},
 	}
 }
