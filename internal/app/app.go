@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"context"
@@ -11,18 +11,19 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/rm-ryou/mococoplan/internal/api/router"
+	"github.com/rm-ryou/mococoplan/internal/app/router"
 	"github.com/rm-ryou/mococoplan/internal/config"
 	"github.com/rm-ryou/mococoplan/pkg/mysql"
 )
 
-func main() {
+func Run() error {
 	cfg := config.NewConfig()
 
+	// TODO: logging
 	dsn := mysql.CreateDSN(cfg.DB.Name, cfg.DB.User, cfg.DB.Password, cfg.DB.Port)
 	db, err := mysql.NewDB(dsn)
 	if err != nil {
-		log.Fatalf("Failed to connect db: %v", err)
+		return fmt.Errorf("Failed to connect db: %w", err)
 	}
 	defer db.Close()
 
@@ -42,7 +43,6 @@ func main() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
-	// TODO: logging
 	select {
 	case err := <-errCh:
 		log.Printf("HTTP server ListenAndServe: %v", err)
@@ -54,6 +54,8 @@ func main() {
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("HTTP server Shutdown: %v", err)
+		return fmt.Errorf("HTTP server Shutdown: %w", err)
 	}
+
+	return nil
 }

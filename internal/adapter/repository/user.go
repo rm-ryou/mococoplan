@@ -4,15 +4,15 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/rm-ryou/mococoplan/internal/domain"
-	"github.com/rm-ryou/mococoplan/internal/service"
+	"github.com/rm-ryou/mococoplan/internal/core/domain"
+	"github.com/rm-ryou/mococoplan/internal/core/port"
 )
 
 type UserRepository struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) service.UserRepository {
+func NewUserRepository(db *sql.DB) port.UserRepository {
 	return &UserRepository{
 		db: db,
 	}
@@ -26,6 +26,6 @@ func (ur *UserRepository) List(ctx context.Context) ([]*domain.User, error) {
 	return nil, nil
 }
 
-func (ur *UserRepository) Delete(ctx context.Context, id domain.UserID) error {
+func (ur *UserRepository) Delete(ctx context.Context, id int) error {
 	return nil
 }

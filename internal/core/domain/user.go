@@ -4,10 +4,8 @@ import (
 	"time"
 )
 
-type UserID int
-
 type User struct {
-	ID            UserID
+	Id            int
 	Name          string
 	Email         string
 	EmailVerified bool
