@@ -7,17 +7,11 @@ import (
 	"github.com/rm-ryou/mococoplan/internal/core/port"
 )
 
-type UserRepository interface {
-	Register(ctx context.Context, user *domain.User) error
-	List(ctx context.Context) ([]*domain.User, error)
-	Delete(ctx context.Context, id domain.UserID) error
-}
-
 type UserService struct {
-	repo UserRepository
+	repo port.UserRepository
 }
 
-func NewUserService(repo UserRepository) port.UserServicer {
+func NewUserService(repo port.UserRepository) port.UserServicer {
 	return &UserService{
 		repo: repo,
 	}
