@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rm-ryou/mococoplan/internal/core/token"
+	"github.com/rm-ryou/mococoplan/internal/core/domain/token"
 )
 
 func Test_IssueAndVerify(t *testing.T) {

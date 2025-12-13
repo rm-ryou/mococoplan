@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/rm-ryou/mococoplan/internal/core/token"
+	"github.com/rm-ryou/mococoplan/internal/core/domain/token"
 )
 
 var ErrInvalidToken = errors.New("invalid token")
