@@ -27,6 +27,8 @@ jobs:
       - name: Migrate up
         run: just migrate-up
         env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_NETWORK: host
           MYSQL_USER: root
           MYSQL_PASSWORD: password
           MYSQL_DATABASE: mococoplan_test
