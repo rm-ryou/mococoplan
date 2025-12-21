@@ -7,9 +7,6 @@ RUN go install "github.com/air-verse/air@v1.63.0"
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY ./main.go ./
-COPY ./.air.toml ./
-
 EXPOSE 3000
 
 ENTRYPOINT ["air", "-c", ".air.toml"]
