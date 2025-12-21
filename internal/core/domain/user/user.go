@@ -2,10 +2,8 @@ package user
 
 import "time"
 
-type ID int
-
 type User struct {
-	Id            ID
+	Id            int
 	Name          string
 	Email         string
 	EmailVerified bool
