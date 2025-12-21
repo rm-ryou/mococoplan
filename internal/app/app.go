@@ -20,7 +20,7 @@ func Run() error {
 	cfg := config.NewConfig()
 
 	// TODO: logging
-	dsn := mysql.CreateDSN(cfg.DB.Name, cfg.DB.User, cfg.DB.Password, cfg.DB.Port)
+	dsn := mysql.CreateDSN(cfg.DB.Name, cfg.DB.User, cfg.DB.Password, cfg.DB.Host, cfg.DB.Port)
 	db, err := mysql.NewDB(dsn)
 	if err != nil {
 		return fmt.Errorf("Failed to connect db: %w", err)

@@ -13,6 +13,7 @@ type (
 		Name     string
 		User     string
 		Password string
+		Host     string
 		Port     string
 	}
 
@@ -30,6 +31,7 @@ func NewConfig() *Config {
 			Name:     getEnv("DB_NAME", "mococoplan"),
 			User:     getEnv("DB_USER", "user"),
 			Password: getEnv("DB_PASSWORD", "password"),
+			Host:     getEnv("DB_HOST", "mysql"),
 			Port:     getEnv("DB_Port", "3306"),
 		},
 		Redis: Redis{
