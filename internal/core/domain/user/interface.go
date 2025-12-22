@@ -7,10 +7,16 @@ type Creater interface {
 }
 
 type Servicer interface {
-	Creater
+	Create(ctx context.Context, cmd *CreateCmd) error
 }
 
 type Repository interface {
-	Creater
+	Create(ctx context.Context, u *User) error
 	FindByEmail(ctx context.Context, email string) (*User, error)
+}
+
+type CreateCmd struct {
+	Name          string
+	Email         string
+	PlainPassword string
 }
