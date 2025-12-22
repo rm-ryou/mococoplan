@@ -1,0 +1,11 @@
+dir: '{{.InterfaceDir}}/mocks/'
+structname: '{{.InterfaceName}}'
+pkgname: mocks
+template: testify
+filename: mocks.go
+packages:
+  github.com/rm-ryou/mococoplan/internal/core/domain/user:
+    interfaces:
+      Servicer: {}
+      Repository: {}
+
