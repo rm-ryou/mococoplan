@@ -3,7 +3,7 @@
 set dotenv-load
 
 DB_PORT := "3306"
-DB_HOST := env("MYSQL_HOST", "localhost")
+DB_HOST := env("MYSQL_HOST", "mysql")
 DB_NETWORK := env("MYSQL_NETWORK", "mococoplan_default")
 
 DB_NAME := env("MYSQL_DATABASE", "mococoplan")
