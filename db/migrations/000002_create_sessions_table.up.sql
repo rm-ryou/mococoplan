@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
+  UNIQUE KEY (`token`),
   CONSTRAINT fk_sessions_user FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE,
   INDEX idx_sessions_user_id (`user_id`),
   INDEX idx_sessions_expires_at (`expires_at`),
