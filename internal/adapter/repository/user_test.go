@@ -2,13 +2,28 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 
 	"github.com/rm-ryou/mococoplan/internal/core/domain/user"
 )
 
+func countUsersByEmail(t *testing.T, db *sql.DB, email string) int {
+	t.Helper()
+
+	query := "SELECT COUNT(*) FROM users WHERE email = ?"
+	row := db.QueryRow(query, email)
+
+	var cnt int
+	if err := row.Scan(&cnt); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	return cnt
+}
+
 func TestUserRepository_SuccessCreate(t *testing.T) {
-	defer deleteAllUsers(t, testDB)
+	defer deleteAllRecords(t, testDB, "users")
 	repo := NewUserRepository(testDB)
 
 	user := &user.User{
@@ -29,7 +44,7 @@ func TestUserRepository_SuccessCreate(t *testing.T) {
 }
 
 func TestUserRepository_FailedCreate_DuplicateEmail(t *testing.T) {
-	defer deleteAllUsers(t, testDB)
+	defer deleteAllRecords(t, testDB, "users")
 	repo := NewUserRepository(testDB)
 
 	ctx := context.Background()
@@ -51,7 +66,7 @@ func TestUserRepository_FailedCreate_DuplicateEmail(t *testing.T) {
 }
 
 func TestUserRepository_SuccessFindByEmail(t *testing.T) {
-	defer deleteAllUsers(t, testDB)
+	defer deleteAllRecords(t, testDB, "users")
 	repo := NewUserRepository(testDB)
 
 	user := &user.User{
@@ -76,7 +91,7 @@ func TestUserRepository_SuccessFindByEmail(t *testing.T) {
 }
 
 func TestUserRepository_FailedFindByEmail_RecordNotExists(t *testing.T) {
-	defer deleteAllUsers(t, testDB)
+	defer deleteAllRecords(t, testDB, "users")
 	repo := NewUserRepository(testDB)
 
 	email := "not-exists@example.com"
