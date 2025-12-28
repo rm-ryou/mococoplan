@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rm-ryou/mococoplan/internal/core/domain/token"
+	"github.com/rm-ryou/mococoplan/internal/core/ports"
 )
 
 func Test_IssueAndVerify(t *testing.T) {
@@ -12,8 +12,8 @@ func Test_IssueAndVerify(t *testing.T) {
 
 	svc := New("secret", "testIsuuer", 1*time.Minute)
 
-	in := &token.Claims{
-		UserId: 1,
+	in := &ports.UserIdentity{
+		UserID: 1,
 		Email:  "test@example.com",
 	}
 
@@ -34,7 +34,7 @@ func Test_IssueAndVerify(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if out.UserId != in.UserId || out.Email != in.Email {
+	if out.UserID != in.UserID || out.Email != in.Email {
 		t.Fatalf("want: %v, act: %v", out, in)
 	}
 }
@@ -44,8 +44,8 @@ func TestVerify(t *testing.T) {
 
 	svc := New("secret", "test", 1*time.Minute)
 
-	tc := &token.Claims{
-		UserId: 1,
+	tc := &ports.UserIdentity{
+		UserID: 1,
 		Email:  "test@example.com",
 	}
 
@@ -57,7 +57,7 @@ func TestVerify(t *testing.T) {
 	testCases := []struct {
 		name    string
 		token   string
-		wantVal *token.Claims
+		wantVal *ports.UserIdentity
 		wantErr error
 	}{
 		{

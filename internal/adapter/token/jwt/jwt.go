@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/rm-ryou/mococoplan/internal/core/domain/token"
+	"github.com/rm-ryou/mococoplan/internal/core/ports"
 )
 
 var ErrInvalidToken = errors.New("invalid token")
@@ -31,16 +31,16 @@ func New(secret, issuer string, ttl time.Duration) *Service {
 	}
 }
 
-func (s *Service) Issue(c *token.Claims) (*token.AccessToken, error) {
+func (s *Service) Issue(identity *ports.UserIdentity) (*ports.AccessToken, error) {
 	now := time.Now()
 	exp := now.Add(s.ttl)
 
 	jc := &jwtClaims{
-		UserId: strconv.Itoa(c.UserId),
-		Email:  c.Email,
+		UserId: strconv.Itoa(identity.UserID),
+		Email:  identity.Email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    s.issuer,
-			Subject:   strconv.Itoa(c.UserId),
+			Subject:   strconv.Itoa(identity.UserID),
 			IssuedAt:  jwt.NewNumericDate(now),
 			ExpiresAt: jwt.NewNumericDate(exp),
 		},
@@ -52,13 +52,13 @@ func (s *Service) Issue(c *token.Claims) (*token.AccessToken, error) {
 		return nil, err
 	}
 
-	return &token.AccessToken{
+	return &ports.AccessToken{
 		Token:     ss,
 		ExpiresAt: exp,
 	}, nil
 }
 
-func (s *Service) Verify(t string) (*token.Claims, error) {
+func (s *Service) Verify(t string) (*ports.UserIdentity, error) {
 	jc := &jwtClaims{}
 	parsed, err := jwt.ParseWithClaims(t, jc, func(t *jwt.Token) (any, error) {
 		if t.Method != jwt.SigningMethodHS256 {
@@ -75,13 +75,13 @@ func (s *Service) Verify(t string) (*token.Claims, error) {
 		return nil, ErrInvalidToken
 	}
 
-	userId, err := strconv.Atoi(jc.UserId)
+	userID, err := strconv.Atoi(jc.UserId)
 	if err != nil {
 		return nil, err
 	}
 
-	return &token.Claims{
-		UserId: userId,
+	return &ports.UserIdentity{
+		UserID: userID,
 		Email:  jc.Email,
 	}, nil
 }
