@@ -1,9 +1,11 @@
-package user
+package domain
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
-	Id            int
+	ID            int
 	Name          string
 	Email         string
 	EmailVerified bool
