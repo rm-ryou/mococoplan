@@ -17,7 +17,10 @@ import (
 )
 
 func Run() error {
-	cfg := config.NewConfig()
+	cfg, err := config.NewConfig()
+	if err != nil {
+		return err
+	}
 
 	// TODO: logging
 	dsn := mysql.CreateDSN(cfg.DB.Name, cfg.DB.User, cfg.DB.Password, cfg.DB.Host, cfg.DB.Port)
