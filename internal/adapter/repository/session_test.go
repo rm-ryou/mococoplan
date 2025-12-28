@@ -7,8 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rm-ryou/mococoplan/internal/core/domain/session"
-	"github.com/rm-ryou/mococoplan/internal/core/domain/user"
+	"github.com/rm-ryou/mococoplan/internal/core/domain"
 )
 
 func countSessionsRecords(t *testing.T, db *sql.DB, token [32]byte) int {
@@ -33,7 +32,7 @@ func TestSessionRepository_SuccessCreate(t *testing.T) {
 
 	token := sha256.Sum256([]byte("test-token"))
 
-	if err := userRepo.Create(context.Background(), &user.User{
+	if err := userRepo.Create(context.Background(), &domain.User{
 		Name:         "test name",
 		Email:        "test@example.com",
 		PasswordHash: "testHashedPassword",
@@ -46,8 +45,8 @@ func TestSessionRepository_SuccessCreate(t *testing.T) {
 		t.Fatalf("failed to fetch user: %v", err)
 	}
 
-	testSession := &session.Session{
-		UserId:    user.Id,
+	testSession := &domain.Session{
+		UserID:    user.ID,
 		Token:     token,
 		ExpiresAt: time.Now(),
 	}
@@ -71,7 +70,7 @@ func TestSessionRepository_FailedCreate_DuplicateSession(t *testing.T) {
 
 	token := sha256.Sum256([]byte("test-token"))
 
-	if err := userRepo.Create(context.Background(), &user.User{
+	if err := userRepo.Create(context.Background(), &domain.User{
 		Name:         "test name",
 		Email:        "test@example.com",
 		PasswordHash: "testHashedPassword",
@@ -84,8 +83,8 @@ func TestSessionRepository_FailedCreate_DuplicateSession(t *testing.T) {
 		t.Fatalf("failed to fetch user: %v", err)
 	}
 
-	testSession := &session.Session{
-		UserId:    user.Id,
+	testSession := &domain.Session{
+		UserID:    user.ID,
 		Token:     token,
 		ExpiresAt: time.Now(),
 	}
@@ -96,8 +95,8 @@ func TestSessionRepository_FailedCreate_DuplicateSession(t *testing.T) {
 	}
 
 	err = repo.Create(context.Background(), testSession)
-	if err != session.ErrInvalid {
-		t.Errorf("want: %v, act: %v", session.ErrInvalid, err)
+	if err != domain.ErrSessionInvalid {
+		t.Errorf("want: %v, act: %v", domain.ErrSessionInvalid, err)
 	}
 }
 
@@ -109,7 +108,7 @@ func TestSessionRepository_FindByToken(t *testing.T) {
 
 	token := sha256.Sum256([]byte("test-token"))
 
-	if err := userRepo.Create(context.Background(), &user.User{
+	if err := userRepo.Create(context.Background(), &domain.User{
 		Name:         "test name",
 		Email:        "test@example.com",
 		PasswordHash: "testHashedPassword",
@@ -122,8 +121,8 @@ func TestSessionRepository_FindByToken(t *testing.T) {
 		t.Fatalf("failed to fetch user: %v", err)
 	}
 
-	testSession := &session.Session{
-		UserId:    user.Id,
+	testSession := &domain.Session{
+		UserID:    user.ID,
 		Token:     token,
 		ExpiresAt: time.Now(),
 	}
@@ -150,8 +149,8 @@ func TestSessionRepository_FindByToken(t *testing.T) {
 		if s != nil {
 			t.Errorf("want: %v, act: %v", nil, s)
 		}
-		if err != session.ErrNotFound {
-			t.Errorf("want: %v, act: %v", session.ErrNotFound, err)
+		if err != domain.ErrSessionNotFound {
+			t.Errorf("want: %v, act: %v", domain.ErrSessionNotFound, err)
 		}
 	})
 }
@@ -164,7 +163,7 @@ func TestSessionRepository_SuccessDelete(t *testing.T) {
 
 	token := sha256.Sum256([]byte("test-token"))
 
-	if err := userRepo.Create(context.Background(), &user.User{
+	if err := userRepo.Create(context.Background(), &domain.User{
 		Name:         "test name",
 		Email:        "test@example.com",
 		PasswordHash: "testHashedPassword",
@@ -177,8 +176,8 @@ func TestSessionRepository_SuccessDelete(t *testing.T) {
 		t.Fatalf("failed to fetch user: %v", err)
 	}
 
-	testSession := &session.Session{
-		UserId:    user.Id,
+	testSession := &domain.Session{
+		UserID:    user.ID,
 		Token:     token,
 		ExpiresAt: time.Now(),
 	}

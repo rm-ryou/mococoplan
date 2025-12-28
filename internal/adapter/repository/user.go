@@ -6,20 +6,21 @@ import (
 	"errors"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/rm-ryou/mococoplan/internal/core/domain/user"
+	"github.com/rm-ryou/mococoplan/internal/core/domain"
+	"github.com/rm-ryou/mococoplan/internal/core/ports"
 )
 
 type UserRepository struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) user.Repository {
+func NewUserRepository(db *sql.DB) ports.UserRepository {
 	return &UserRepository{
 		db: db,
 	}
 }
 
-func (ur *UserRepository) Create(ctx context.Context, u *user.User) error {
+func (ur *UserRepository) Create(ctx context.Context, u *domain.User) error {
 	query := "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)"
 
 	stmt, err := ur.db.PrepareContext(ctx, query)
@@ -38,7 +39,7 @@ func (ur *UserRepository) Create(ctx context.Context, u *user.User) error {
 		var mysqlErr *mysql.MySQLError
 		if ok := errors.As(err, &mysqlErr); ok {
 			if mysqlErr.Number == 1062 {
-				return ErrEmailAlreadyExists
+				return domain.ErrEmailAlreadyExists
 			}
 		}
 		return err
@@ -47,7 +48,7 @@ func (ur *UserRepository) Create(ctx context.Context, u *user.User) error {
 	return nil
 }
 
-func (ur *UserRepository) FindByEmail(ctx context.Context, email string) (*user.User, error) {
+func (ur *UserRepository) FindByEmail(ctx context.Context, email string) (*domain.User, error) {
 	query := `
 		SELECT
 			id,
@@ -65,9 +66,9 @@ func (ur *UserRepository) FindByEmail(ctx context.Context, email string) (*user.
 	`
 	row := ur.db.QueryRowContext(ctx, query, email)
 
-	var u user.User
+	var u domain.User
 	if err := row.Scan(
-		&u.Id,
+		&u.ID,
 		&u.Name,
 		&u.Email,
 		&u.EmailVerified,
@@ -77,7 +78,7 @@ func (ur *UserRepository) FindByEmail(ctx context.Context, email string) (*user.
 		&u.UpdatedAt,
 	); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, ErrNotFound
+			return nil, domain.ErrUserNotFound
 		}
 		return nil, err
 	}

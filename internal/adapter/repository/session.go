@@ -6,20 +6,21 @@ import (
 	"errors"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/rm-ryou/mococoplan/internal/core/domain/session"
+	"github.com/rm-ryou/mococoplan/internal/core/domain"
+	"github.com/rm-ryou/mococoplan/internal/core/ports"
 )
 
 type SessionRepository struct {
 	db *sql.DB
 }
 
-func NewSessionRepository(db *sql.DB) session.Repository {
+func NewSessionRepository(db *sql.DB) ports.SessionRepository {
 	return &SessionRepository{
 		db: db,
 	}
 }
 
-func (sr *SessionRepository) Create(ctx context.Context, s *session.Session) error {
+func (sr *SessionRepository) Create(ctx context.Context, s *domain.Session) error {
 	query := `
 		INSERT INTO sessions
 			(user_id, token, ip_address, user_agent, expires_at)
@@ -34,9 +35,9 @@ func (sr *SessionRepository) Create(ctx context.Context, s *session.Session) err
 
 	_, err = stmt.ExecContext(
 		ctx,
-		s.UserId,
+		s.UserID,
 		s.Token[:],
-		s.IPAddress[:],
+		s.IP[:],
 		s.UserAgent,
 		s.ExpiresAt,
 	)
@@ -44,7 +45,7 @@ func (sr *SessionRepository) Create(ctx context.Context, s *session.Session) err
 		var mysqlErr *mysql.MySQLError
 		if ok := errors.As(err, &mysqlErr); ok {
 			if mysqlErr.Number == 1062 {
-				return session.ErrInvalid
+				return domain.ErrSessionInvalid
 			}
 		}
 		return err
@@ -53,7 +54,7 @@ func (sr *SessionRepository) Create(ctx context.Context, s *session.Session) err
 	return nil
 }
 
-func (sr *SessionRepository) FindByToken(ctx context.Context, token [32]byte) (*session.Session, error) {
+func (sr *SessionRepository) FindByToken(ctx context.Context, token domain.SessionToken) (*domain.Session, error) {
 	query := `
 		SELECT
 			id,
@@ -73,38 +74,38 @@ func (sr *SessionRepository) FindByToken(ctx context.Context, token [32]byte) (*
 	row := sr.db.QueryRowContext(ctx, query, token[:])
 
 	var tokenBytes []byte
-	var ipAddressBytes []byte
-	var s session.Session
+	var ipBytes []byte
+	var s domain.Session
 	if err := row.Scan(
-		&s.Id,
-		&s.UserId,
+		&s.ID,
+		&s.UserID,
 		&tokenBytes,
-		&ipAddressBytes,
+		&ipBytes,
 		&s.UserAgent,
 		&s.ExpiresAt,
 		&s.CreatedAt,
 		&s.UpdatedAt,
 	); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, session.ErrNotFound
+			return nil, domain.ErrSessionNotFound
 		}
 		return nil, err
 	}
 
 	if len(tokenBytes) != 32 {
-		return nil, session.ErrInvalid
+		return nil, domain.ErrSessionInvalid
 	}
 	copy(s.Token[:], tokenBytes)
 
-	if len(ipAddressBytes) != 16 {
-		return nil, session.ErrInvalid
+	if len(ipBytes) != 16 {
+		return nil, domain.ErrSessionInvalid
 	}
-	copy(s.IPAddress[:], ipAddressBytes)
+	copy(s.IP[:], ipBytes)
 
 	return &s, nil
 }
 
-func (sr *SessionRepository) Delete(ctx context.Context, token [32]byte) error {
+func (sr *SessionRepository) Delete(ctx context.Context, token domain.SessionToken) error {
 	query := "DELETE FROM sessions WHERE token = ?"
 
 	_, err := sr.db.ExecContext(ctx, query, token[:])

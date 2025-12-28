@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/rm-ryou/mococoplan/internal/core/domain/user"
+	"github.com/rm-ryou/mococoplan/internal/core/domain"
 )
 
 func countUsersByEmail(t *testing.T, db *sql.DB, email string) int {
@@ -26,7 +26,7 @@ func TestUserRepository_SuccessCreate(t *testing.T) {
 	defer deleteAllRecords(t, testDB, "users")
 	repo := NewUserRepository(testDB)
 
-	user := &user.User{
+	user := &domain.User{
 		Name:         "test name",
 		Email:        "test@example.com",
 		PasswordHash: "testHashedPassword",
@@ -48,7 +48,7 @@ func TestUserRepository_FailedCreate_DuplicateEmail(t *testing.T) {
 	repo := NewUserRepository(testDB)
 
 	ctx := context.Background()
-	user := &user.User{
+	user := &domain.User{
 		Name:         "test name",
 		Email:        "dup@example.com",
 		PasswordHash: "testHashedPassword",
@@ -60,7 +60,7 @@ func TestUserRepository_FailedCreate_DuplicateEmail(t *testing.T) {
 	}
 
 	err = repo.Create(ctx, user)
-	if err != ErrEmailAlreadyExists {
+	if err != domain.ErrEmailAlreadyExists {
 		t.Errorf("unexpected error: %v", err)
 	}
 }
@@ -69,7 +69,7 @@ func TestUserRepository_SuccessFindByEmail(t *testing.T) {
 	defer deleteAllRecords(t, testDB, "users")
 	repo := NewUserRepository(testDB)
 
-	user := &user.User{
+	user := &domain.User{
 		Name:         "test name",
 		Email:        "test@example.com",
 		PasswordHash: "testHashedPassword",
@@ -97,7 +97,7 @@ func TestUserRepository_FailedFindByEmail_RecordNotExists(t *testing.T) {
 	email := "not-exists@example.com"
 
 	act, err := repo.FindByEmail(context.Background(), email)
-	if err != ErrNotFound {
+	if err != domain.ErrUserNotFound {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
