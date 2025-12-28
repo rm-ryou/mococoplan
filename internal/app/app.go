@@ -30,7 +30,7 @@ func Run() error {
 	}
 	defer db.Close()
 
-	router := router.Setup(db)
+	router := router.Setup(db, cfg.Token)
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: router,
