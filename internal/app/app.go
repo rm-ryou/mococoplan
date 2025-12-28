@@ -11,9 +11,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/rm-ryou/mococoplan/internal/adapter/repository"
 	"github.com/rm-ryou/mococoplan/internal/app/router"
 	"github.com/rm-ryou/mococoplan/internal/config"
-	"github.com/rm-ryou/mococoplan/pkg/mysql"
 )
 
 func Run() error {
@@ -23,8 +23,8 @@ func Run() error {
 	}
 
 	// TODO: logging
-	dsn := mysql.CreateDSN(cfg.DB.Name, cfg.DB.User, cfg.DB.Password, cfg.DB.Host, cfg.DB.Port)
-	db, err := mysql.NewDB(dsn)
+	dsn := repository.CreateDSN(cfg.DB.Name, cfg.DB.User, cfg.DB.Password, cfg.DB.Host, cfg.DB.Port)
+	db, err := repository.NewDB(dsn)
 	if err != nil {
 		return fmt.Errorf("Failed to connect db: %w", err)
 	}
@@ -43,7 +43,7 @@ func Run() error {
 		}
 	}()
 
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
 	select {

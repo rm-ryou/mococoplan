@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"os"
 	"testing"
-
-	"github.com/rm-ryou/mococoplan/pkg/mysql"
 )
 
 var testDB *sql.DB
@@ -17,9 +15,9 @@ func TestMain(m *testing.M) {
 	user := getEnv("TEST_DB_USER", "user")
 	password := getEnv("TEST_DB_PASSWORD", "password")
 
-	dsn := mysql.CreateDSN(name, user, password, host, port)
+	dsn := CreateDSN(name, user, password, host, port)
 	var err error
-	testDB, err = mysql.NewDB(dsn)
+	testDB, err = NewDB(dsn)
 	if err != nil {
 		panic(err)
 	}
