@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/rm-ryou/mococoplan/internal/adapter/handler"
+	"github.com/rm-ryou/mococoplan/internal/adapter/http/handler"
 	"github.com/rm-ryou/mococoplan/internal/adapter/repository"
 	"github.com/rm-ryou/mococoplan/internal/adapter/token/jwt"
 	"github.com/rm-ryou/mococoplan/internal/config"
