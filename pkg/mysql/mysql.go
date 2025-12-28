@@ -25,11 +25,12 @@ func NewDB(dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
-func CreateDSN(name, user, password, port string) string {
+func CreateDSN(name, user, password, host, port string) string {
 	return fmt.Sprintf(
-		"%s:%s@tcp(mysql:%s)/%s?parseTime=true",
+		"%s:%s@tcp(%s:%s)/%s?parseTime=true",
 		user,
 		password,
+		host,
 		port,
 		name,
 	)

@@ -5,11 +5,12 @@ import (
 )
 
 type User struct {
-	Id            int
+	ID            int
 	Name          string
 	Email         string
 	EmailVerified bool
-	ImageUrl      string
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
+	PasswordHash  string
+	ImageUrl      *string
+	CreatedAt     *time.Time
+	UpdatedAt     *time.Time
 }

@@ -17,17 +17,20 @@ import (
 )
 
 func Run() error {
-	cfg := config.NewConfig()
+	cfg, err := config.NewConfig()
+	if err != nil {
+		return err
+	}
 
 	// TODO: logging
-	dsn := mysql.CreateDSN(cfg.DB.Name, cfg.DB.User, cfg.DB.Password, cfg.DB.Port)
+	dsn := mysql.CreateDSN(cfg.DB.Name, cfg.DB.User, cfg.DB.Password, cfg.DB.Host, cfg.DB.Port)
 	db, err := mysql.NewDB(dsn)
 	if err != nil {
 		return fmt.Errorf("Failed to connect db: %w", err)
 	}
 	defer db.Close()
 
-	router := router.Setup(db)
+	router := router.Setup(db, cfg.Token)
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: router,

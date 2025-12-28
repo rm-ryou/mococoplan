@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Setup just
+        uses: extractions/setup-just@v3
+        with:
+          just-version: '1.43.1'
+
+      - name: Migrate up
+        run: just migrate-up
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_NETWORK: host
+          MYSQL_USER: root
+          MYSQL_PASSWORD: password
+          MYSQL_DATABASE: mococoplan_test
+
+      - name: Run tests
+        run: go test ./...
+        env:
+          TEST_DB_USER: root
+          TEST_DB_PASSWORD: password
+          TEST_DB_NAME: mococoplan_test
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: mococoplan_test
+          TZ: UTC
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -ppassword"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=30
