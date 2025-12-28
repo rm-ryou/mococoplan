@@ -11,8 +11,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/rm-ryou/mococoplan/internal/adapter/http/router"
 	"github.com/rm-ryou/mococoplan/internal/adapter/repository"
-	"github.com/rm-ryou/mococoplan/internal/app/router"
 	"github.com/rm-ryou/mococoplan/internal/config"
 )
 
