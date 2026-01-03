@@ -11,4 +11,6 @@ var (
 	ErrSessionExpired  = errors.New("session expired")
 	ErrSessionRevoked  = errors.New("session revoked")
 	ErrSessionInvalid  = errors.New("invalid session")
+
+	ErrForbiddenRole = errors.New("forbidden role")
 )
