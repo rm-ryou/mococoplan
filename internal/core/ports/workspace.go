@@ -28,7 +28,7 @@ type WorkspaceServicer interface {
 }
 
 type WorkspaceRepository interface {
-	Create(ctx context.Context, tx *sql.Tx, ws *domain.Workspace) error
+	Create(ctx context.Context, tx *sql.Tx, ws *domain.Workspace) (int, error)
 	FindByID(ctx context.Context, workspaceID int) (*domain.Workspace, error)
 	ListByUser(ctx context.Context, userID int) ([]*domain.Workspace, error)
 }
@@ -39,8 +39,4 @@ type WorkspaceMemberRepository interface {
 	FetchRole(ctc context.Context, workspaceID, userID int) (domain.WorkspaceRole, error)
 	ListMembers(ctx context.Context, workspaceID int) ([]*domain.WorkspaceMember, error)
 	Exists(ctx context.Context, workspaceID, userID int) (bool, error)
-}
-
-type TxManager interface {
-	WithinTx(ctx context.Context, fn func(tx *sql.Tx) error) error
 }
