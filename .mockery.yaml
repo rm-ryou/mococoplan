@@ -11,4 +11,8 @@ packages:
       AuthServicer: {}
       UserRepository: {}
       SessionRepository: {}
+      TxManager: {}
+      WorkspaceServicer: {}
+      WorkspaceRepository: {}
+      WorkspaceMemberRepository: {}
 
