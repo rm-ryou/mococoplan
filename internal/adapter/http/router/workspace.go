@@ -26,8 +26,8 @@ func NewWorkspaceRouter(mux *http.ServeMux, db *sql.DB, tokenCfg config.Token) {
 	workspaceMux := http.NewServeMux()
 	workspaceMux.Handle("POST /api/v1/workspaces/", auth.RequireAuth(http.HandlerFunc(h.Create)))
 	workspaceMux.Handle("GET /api/v1/workspaces/", auth.RequireAuth(http.HandlerFunc(h.ListWorkspaces)))
-	workspaceMux.Handle("POST /api/v1/{workspacesId}/members", auth.RequireAuth(http.HandlerFunc(h.ListWorkspaces)))
-	workspaceMux.Handle("GET /api/v1/{workspacesId}/members", auth.RequireAuth(http.HandlerFunc(h.ListMembers)))
+	workspaceMux.Handle("POST /api/v1/workspaces/{workspacesId}/members", auth.RequireAuth(http.HandlerFunc(h.AddMember)))
+	workspaceMux.Handle("GET /api/v1/workspaces/{workspacesId}/members", auth.RequireAuth(http.HandlerFunc(h.ListMembers)))
 
 	mux.Handle("/api/v1/workspaces/", workspaceMux)
 }

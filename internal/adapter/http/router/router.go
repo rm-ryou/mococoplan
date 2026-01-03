@@ -11,6 +11,7 @@ func Setup(db *sql.DB, tokenCfg config.Token) http.Handler {
 	mux := http.NewServeMux()
 
 	NewAuthRouter(mux, db, tokenCfg)
+	NewWorkspaceRouter(mux, db, tokenCfg)
 
 	return mux
 }
