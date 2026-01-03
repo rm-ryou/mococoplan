@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `workspace_members` (
   `workspace_id` INT NOT NULL,
   `user_id` INT NOT NULL,
   `role` ENUM('owner', 'admin', 'member') NOT NULL DEFAULT 'member',
-  `joined_at` DATETIME NOT NULL,
+  `joined_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
