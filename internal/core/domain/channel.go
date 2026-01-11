@@ -13,6 +13,11 @@ type Channel struct {
 	UpdatedAt   time.Time
 }
 
+type ChannelWithJoin struct {
+	Channel
+	Joined bool
+}
+
 type ChannelMember struct {
 	ChannelID int
 	UserID    int
