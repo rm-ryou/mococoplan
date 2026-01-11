@@ -8,18 +8,11 @@ import (
 )
 
 type CreateChannelCmd struct {
-	RequesterUserID int
-	WorkspaceID     int
-	Name            string
-	Description     string
-	IsPrivate       bool
-}
-
-type AddChannelMemberCmd struct {
-	RequesterUserID int
-	WorkspaceID     int
-	ChannelID       int
-	TargetUserID    int
+	UserID      int
+	WorkspaceID int
+	Name        string
+	Description string
+	IsPrivate   bool
 }
 
 type ChannelServicer interface {
@@ -27,11 +20,11 @@ type ChannelServicer interface {
 	ListJoined(ctx context.Context, workspaceID, userID int) ([]*domain.ChannelWithJoin, error)
 	Join(ctx context.Context, channelID, userID int) error
 	Leave(ctx context.Context, channelID, userID int) error
-	AddMember(ctx context.Context, cmd *AddChannelMemberCmd) error
+	AddMember(ctx context.Context, channelID, userID int) error
 }
 
 type ChannelRepository interface {
-	Create(ctx context.Context, tx *sql.Tx, ch *domain.Channel) error
+	Create(ctx context.Context, tx *sql.Tx, ch *domain.Channel) (int, error)
 	ListJoined(ctx context.Context, workspaceID, userID int) ([]*domain.ChannelWithJoin, error)
 }
 
