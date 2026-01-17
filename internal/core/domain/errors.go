@@ -16,4 +16,6 @@ var (
 
 	ErrSlugAlreadyExists = errors.New("slug already exists")
 	ErrForbiddenRole     = errors.New("forbidden role")
+
+	ErrChannelAlreadyExists = errors.New("channel already exists")
 )

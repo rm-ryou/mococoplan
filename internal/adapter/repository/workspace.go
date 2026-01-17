@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/rm-ryou/mococoplan/internal/core/domain"
@@ -105,7 +104,6 @@ func (wr *WorkspaceRepository) ListByUser(ctx context.Context, userID int) ([]*d
 		); err != nil {
 			return nil, err
 		}
-		fmt.Println("ws:", ws)
 		workspaces = append(workspaces, &ws)
 	}
 
